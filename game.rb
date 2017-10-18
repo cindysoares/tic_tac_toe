@@ -3,6 +3,7 @@ class Game
     @board = ["0", "1", "2", "3", "4", "5", "6", "7", "8"]
     @com = "X" # the computer's marker
     @hum = "O" # the user's marker
+    @winners_symbol = nil
   end
 
   def start_game
@@ -17,7 +18,17 @@ class Game
       end
       puts " #{@board[0]} | #{@board[1]} | #{@board[2]} \n===+===+===\n #{@board[3]} | #{@board[4]} | #{@board[5]} \n===+===+===\n #{@board[6]} | #{@board[7]} | #{@board[8]} \n"
     end
-    puts "Game over"
+    puts "Game over, #{winners_message}"
+  end
+
+  def winners_message
+    if @winners_symbol=='X'
+      'Computer is the winner!'
+    elsif @winners_symbol=='O'
+      'you are the winner!'
+    else
+      'there is no winner!'
+    end
   end
 
   def get_human_spot
@@ -82,16 +93,20 @@ class Game
     end
   end
 
-  def game_is_over(b)
+  def game_is_over(b)      
+    has_a_winner = (symbols=[b[0], b[1], b[2]].uniq).length == 1 ||
+    (symbols=[b[3], b[4], b[5]].uniq).length == 1 ||
+    (symbols=[b[6], b[7], b[8]].uniq).length == 1 ||
+    (symbols=[b[0], b[3], b[6]].uniq).length == 1 ||
+    (symbols=[b[1], b[4], b[7]].uniq).length == 1 ||
+    (symbols=[b[2], b[5], b[8]].uniq).length == 1 ||
+    (symbols=[b[0], b[4], b[8]].uniq).length == 1 ||
+    (symbols=[b[2], b[4], b[6]].uniq).length == 1
 
-    [b[0], b[1], b[2]].uniq.length == 1 ||
-    [b[3], b[4], b[5]].uniq.length == 1 ||
-    [b[6], b[7], b[8]].uniq.length == 1 ||
-    [b[0], b[3], b[6]].uniq.length == 1 ||
-    [b[1], b[4], b[7]].uniq.length == 1 ||
-    [b[2], b[5], b[8]].uniq.length == 1 ||
-    [b[0], b[4], b[8]].uniq.length == 1 ||
-    [b[2], b[4], b[6]].uniq.length == 1
+    if has_a_winner 
+      @winners_symbol=symbols[0]
+    end
+    has_a_winner
   end
 
   def tie(b)
@@ -100,5 +115,7 @@ class Game
 
 end
 
-game = Game.new
-game.start_game
+if $0 == __FILE__
+  game = Game.new
+  game.start_game
+end
