@@ -28,7 +28,7 @@ class Game
       'you are the winner!'
     else
       'there is no winner!'
-    end
+    end        
   end
 
   def get_human_spot
@@ -37,7 +37,7 @@ class Game
       spot = gets.chomp.to_i
       if @board[spot] != "X" && @board[spot] != "O"
         @board[spot] = @hum
-      else
+      else 
         spot = nil
       end
     end
@@ -106,6 +106,7 @@ class Game
     if has_a_winner 
       @winners_symbol=symbols[0]
     end
+
     has_a_winner
   end
 
