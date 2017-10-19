@@ -79,6 +79,7 @@ class Game
         if game_is_over(board)
           best_move = as.to_i
           board[as.to_i] = as
+          @winners_symbol=nil
           return best_move
         else
           board[as.to_i] = as
