@@ -5,6 +5,7 @@ class Game
     @hum = "O" # the user's marker
     @winners_symbol = nil
     @user_input = nil
+    @players=[Player.new, ExpertComputer.new]
   end
 
   def start_game
@@ -38,26 +39,19 @@ class Game
   end
 
   def get_human_spot
-    spot = nil
-    until spot
-      spot = get_user_input.to_i
+    @user_input = nil
+    until @user_input
+      @user_input = @players[0].get_spot
+      spot = @user_input.to_i
       if game_is_over then 
         return 
       elsif @user_input=~/[0-8]/ && @board[spot] != "X" && @board[spot] != "O"
         @board[spot] = @hum
       else 
         puts "Invalid position! Try again ..."
-        spot = nil
+        @user_input = nil
       end
     end
-  end
-
-  def get_user_input
-    @user_input=nil
-    until @user_input
-      @user_input = gets.chomp
-    end
-    @user_input
   end
 
   def eval_board
@@ -134,6 +128,28 @@ class Game
 
   def tie(b)
     b.all? { |s| s == "X" || s == "O" }
+  end
+
+end
+
+class Player
+
+  def initialize
+  end
+
+  def get_spot
+    spot = nil
+    until spot
+      spot = gets.chomp
+    end
+    spot
+  end
+
+end
+
+class ExpertComputer < Player
+
+  def get_spot
   end
 
 end

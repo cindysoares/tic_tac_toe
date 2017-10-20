@@ -8,12 +8,20 @@ RSpec.describe Game do
     	expect(game.instance_variable_get(:@board)).to eq(["0", "1", "2", "3", "4", "5", "6", "7", "8"])
   	end
 
+  	it 'should initially have a Human player and an expert Computer player' do
+  		players=game.instance_variable_get(:@players)
+    	expect(players[0]).to be_an_instance_of Player
+    	expect(players[1]).to be_an_instance_of ExpertComputer
+  	end
+
   	it 'should has no winner yet' do  		
   		expectWinnerTo(be_nil)
   	end
 
   	it 'should print board and instructions when starts' do
-  		expect(game).to receive(:gets).and_return('exit')
+  		humanPlayer=double(Player)
+		game.instance_variable_get(:@players)[0]=humanPlayer
+  		expect(humanPlayer).to receive(:get_spot).and_return('exit')
 
   		expect(game).to receive(:puts).with("\nHint: Type \'exit\' to leave.\n\n").ordered
   		expect(game).to receive(:puts).with(" 0 | 1 | 2 \n===+===+===\n 3 | 4 | 5 \n===+===+===\n 6 | 7 | 8 \n").ordered
@@ -24,8 +32,10 @@ RSpec.describe Game do
   	end
 
   	it 'should print \'Invalid position! Try again...\' when the user\'s input is different from 0,1,2,3,4,5,6,7,8 or exit' do
-  		expect(game).to receive(:gets).and_return('p')
-  		expect(game).to receive(:gets).and_return('exit')
+  		humanPlayer=double(Player)
+		game.instance_variable_get(:@players)[0]=humanPlayer
+  		expect(humanPlayer).to receive(:get_spot).and_return('p')
+  		expect(humanPlayer).to receive(:get_spot).and_return('exit')
 
   		expect(game).to receive(:puts).with('Invalid position! Try again ...')
   		expect(game).to receive(:puts).with(any_args).at_least(1).times
