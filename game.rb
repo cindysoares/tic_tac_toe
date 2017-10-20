@@ -4,21 +4,27 @@ class Game
     @com = "X" # the computer's marker
     @hum = "O" # the user's marker
     @winners_symbol = nil
+    @user_input = nil
   end
 
   def start_game
     # start by printing the board
-    puts " #{@board[0]} | #{@board[1]} | #{@board[2]} \n===+===+===\n #{@board[3]} | #{@board[4]} | #{@board[5]} \n===+===+===\n #{@board[6]} | #{@board[7]} | #{@board[8]} \n"
-    puts "Enter [0-8]:"
-    # loop through until the game was won or tied
-    until game_is_over(@board) || tie(@board)
+    printBoardAndInstructions()
+    # loop through until the game was won or tied 
+    until game_is_over
       get_human_spot
-      if !game_is_over(@board) && !tie(@board)
+      if !game_is_over
         eval_board
+        printBoardAndInstructions()
       end
-      puts " #{@board[0]} | #{@board[1]} | #{@board[2]} \n===+===+===\n #{@board[3]} | #{@board[4]} | #{@board[5]} \n===+===+===\n #{@board[6]} | #{@board[7]} | #{@board[8]} \n"
     end
     puts "Game over, #{winners_message}"
+  end
+
+  def printBoardAndInstructions
+    puts "\nHint: Type \'exit\' to leave.\n\n"
+    puts " #{@board[0]} | #{@board[1]} | #{@board[2]} \n===+===+===\n #{@board[3]} | #{@board[4]} | #{@board[5]} \n===+===+===\n #{@board[6]} | #{@board[7]} | #{@board[8]} \n"
+    puts "Enter [0-8]:"
   end
 
   def winners_message
@@ -34,13 +40,24 @@ class Game
   def get_human_spot
     spot = nil
     until spot
-      spot = gets.chomp.to_i
+      spot = get_user_input.to_i
+      if game_is_over then 
+        return 
+      end
       if @board[spot] != "X" && @board[spot] != "O"
         @board[spot] = @hum
       else 
         spot = nil
       end
     end
+  end
+
+  def get_user_input
+    @user_input=nil
+    until @user_input
+      @user_input = gets.chomp
+    end
+    @user_input
   end
 
   def eval_board
@@ -70,13 +87,13 @@ class Game
     end
     available_spaces.each do |as|
       board[as.to_i] = @com
-      if game_is_over(board)
+      if has_a_winner(board)
         best_move = as.to_i
         board[as.to_i] = as
         return best_move
       else
         board[as.to_i] = @hum
-        if game_is_over(board)
+        if has_a_winner(board)
           best_move = as.to_i
           board[as.to_i] = as
           @winners_symbol=nil
@@ -94,7 +111,11 @@ class Game
     end
   end
 
-  def game_is_over(b)      
+  def game_is_over
+    @user_input=='exit' || has_a_winner(@board) || tie(@board) 
+  end
+
+  def has_a_winner(b)      
     has_a_winner = (symbols=[b[0], b[1], b[2]].uniq).length == 1 ||
     (symbols=[b[3], b[4], b[5]].uniq).length == 1 ||
     (symbols=[b[6], b[7], b[8]].uniq).length == 1 ||
