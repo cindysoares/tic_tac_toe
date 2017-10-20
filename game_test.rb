@@ -9,9 +9,8 @@ RSpec.describe Game do
   	end
 
   	it 'should initially have a Human player and an expert Computer player' do
-  		players=game.instance_variable_get(:@players)
-    	expect(players[0]).to be_an_instance_of Player
-    	expect(players[1]).to be_an_instance_of ExpertComputer
+    	expect(game.instance_variable_get(:@player1)).to be_an_instance_of Human
+    	expect(game.instance_variable_get(:@player2)).to be_an_instance_of ExpertComputer
   	end
 
   	it 'should has no winner yet' do  		
@@ -20,7 +19,7 @@ RSpec.describe Game do
 
   	it 'should print board and instructions when starts' do
   		humanPlayer=double(Player)
-		game.instance_variable_get(:@players)[0]=humanPlayer
+		game.instance_variable_set(:@player1)=humanPlayer
   		expect(humanPlayer).to receive(:get_spot).and_return('exit')
 
   		expect(game).to receive(:puts).with("\nHint: Type \'exit\' to leave.\n\n").ordered

@@ -5,7 +5,8 @@ class Game
     @hum = "O" # the user's marker
     @winners_symbol = nil
     @user_input = nil
-    @players=[Player.new, ExpertComputer.new]
+    @player1=Human.new
+    @player2=ExpertComputer.new
   end
 
   def start_game
@@ -41,7 +42,7 @@ class Game
   def get_human_spot
     @user_input = nil
     until @user_input
-      @user_input = @players[0].get_spot
+      @user_input = player1.get_spot
       spot = @user_input.to_i
       if game_is_over then 
         return 
@@ -132,7 +133,9 @@ class Game
 
 end
 
-class Player
+
+
+class Human
 
   def initialize
   end
@@ -147,7 +150,7 @@ class Player
 
 end
 
-class ExpertComputer < Player
+class ExpertComputer
 
   def get_spot
   end
