@@ -18,7 +18,17 @@ RSpec.describe Game do
   		expect(game).to receive(:puts).with("\nHint: Type \'exit\' to leave.\n\n").ordered
   		expect(game).to receive(:puts).with(" 0 | 1 | 2 \n===+===+===\n 3 | 4 | 5 \n===+===+===\n 6 | 7 | 8 \n").ordered
   		expect(game).to receive(:puts).with('Enter [0-8]:').ordered
-  		expect(game).to receive(:puts).with('Game over, there is no winner!')
+  		expect(game).to receive(:puts).with('Game over, there is no winner!').ordered
+
+  		game.start_game
+  	end
+
+  	it 'should print \'Invalid position! Try again...\' when the user\'s input is different from 0,1,2,3,4,5,6,7,8 or exit' do
+  		expect(game).to receive(:gets).and_return('p')
+  		expect(game).to receive(:gets).and_return('exit')
+
+  		expect(game).to receive(:puts).with('Invalid position! Try again ...')
+  		expect(game).to receive(:puts).with(any_args).at_least(1).times
 
   		game.start_game
   	end

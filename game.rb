@@ -43,10 +43,10 @@ class Game
       spot = get_user_input.to_i
       if game_is_over then 
         return 
-      end
-      if @board[spot] != "X" && @board[spot] != "O"
+      elsif @user_input=~/[0-8]/ && @board[spot] != "X" && @board[spot] != "O"
         @board[spot] = @hum
       else 
+        puts "Invalid position! Try again ..."
         spot = nil
       end
     end
