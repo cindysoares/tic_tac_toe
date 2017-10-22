@@ -43,7 +43,7 @@ RSpec.describe Game do
   	end
 
   	it 'should print board and instructions when starts' do
-  		expect(game).to receive(:gets).and_return('1')
+  		expect(game).to receive(:gets).and_return('1').twice
   		
   		humanPlayer=double(Human)
 		game.instance_variable_set(:@player1, humanPlayer)
@@ -59,6 +59,8 @@ RSpec.describe Game do
   	end
 
   	it 'should print \'Invalid position! Try again...\' when the user\'s input is different from 0,1,2,3,4,5,6,7,8 or exit' do
+  		expect(game).to receive(:gets).and_return('1').twice
+
   		humanPlayer=double(Human)
 		game.instance_variable_set(:@player1, humanPlayer)
   		expect(humanPlayer).to receive(:get_spot).and_return('p')
@@ -73,6 +75,7 @@ RSpec.describe Game do
 	context 'should say \'Game over,' do
 
 		it 'you are the winner!\' when the Human wins the @game' do
+			expect(game).to receive(:gets).and_return('1').twice
 			game.instance_variable_set(:@board, ["O", "O", "O", "3", "4", "5", "6", "7", "8"]) 
 
 			expect(game).to receive(:puts).with('Game over, you are the winner!')
@@ -84,6 +87,7 @@ RSpec.describe Game do
 		end
 
 		it 'Computer is the winner!\' when the Computer wins the @game' do
+			expect(game).to receive(:gets).and_return('1').twice
 			game.instance_variable_set(:@board, ["1", "2", "X", "3", "X", "5", "X", "7", "8"]) 
 			
 			expect(game).to receive(:puts).with('Game over, Computer is the winner!')
@@ -95,6 +99,7 @@ RSpec.describe Game do
 		end
 
 		it 'there is no winner!\' when no one wins the @game' do
+			expect(game).to receive(:gets).and_return('1').twice
 			game.instance_variable_set(:@board, ["O", "X", "O", "O", "X", "O", "X", "O", "X"]) 
 			
 			expect(game).to receive(:puts).with('Game over, there is no winner!')

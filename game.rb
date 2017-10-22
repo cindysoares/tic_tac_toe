@@ -5,6 +5,10 @@ class Game
     @user_input = nil
     @player1=Human.new 'O'
     @player2=ExpertComputer.new 'X', self
+    @game_level={
+      :easy=>SillyComputer.new('X',self), 
+      :medium=>CleverComputer.new('X',self),
+      :hard=>ExpertComputer.new('X', self)}
   end
 
   def start_game
@@ -22,9 +26,31 @@ class Game
 
   def chooseGameType
     puts "Type '1' for HumanXComputer or '2' for HumanXHuman:"
-    user_input=get_user_input
-    if user_input=='2'
-      @player2=Human.new 'X'
+    user_input=nil
+    until user_input
+      user_input=get_user_input
+      if user_input=='2'
+        @player2=Human.new 'X'
+      elsif user_input=='1'
+        puts "Type '1' for easy, '2' for medium or '3' for hard:"
+        user_input=nil
+        until user_input
+          user_input=get_user_input
+          if user_input=='1'
+            @player2=@game_level[:easy]
+          elsif user_input=='2'
+            @player2=@game_level[:medium]
+          elsif user_input=='3'
+            @player2=@game_level[:hard]
+          else
+            puts "Invalid game level! Try again ..." 
+            user_input=nil
+          end
+        end
+      else
+        puts "Invalid game type! Try again ..."
+        user_input=nil
+      end
     end
   end
 
@@ -190,6 +216,49 @@ class ExpertComputer
       return available_spaces[n].to_i
     end
   end  
+
+end
+
+class CleverComputer
+
+  attr_reader :symbol
+
+  def initialize(symbol, game)
+    @symbol=symbol
+    @game=game
+  end
+
+  def get_spot
+    available_spaces = @game.get_available_spaces
+    best_move = nil
+    available_spaces.each do |as|
+      if @game.is_a_game_over_spot as.to_i, @game.get_opponent_of(self) then
+        best_move = as.to_i
+        return best_move
+      end
+    end
+    if best_move
+      return best_move
+    else
+      return available_spaces[available_spaces.length-1].to_i
+    end
+  end
+
+end
+
+class SillyComputer
+
+  attr_reader :symbol
+
+  def initialize(symbol, game)
+    @symbol=symbol
+    @game=game
+  end
+
+  def get_spot
+    available_spaces = @game.get_available_spaces
+    available_spaces[0]
+  end
 
 end
 
