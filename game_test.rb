@@ -19,6 +19,7 @@ RSpec.describe Game do
   		humanPlayer=double(Human)
 		game.instance_variable_set(:@player1, humanPlayer)
   		expect(humanPlayer).to receive(:get_spot).and_return('exit')
+  		expect(humanPlayer).to receive(:symbol).and_return('O')
 
   		expect(game).to receive(:puts).with(any_args).at_least(1).times
 
@@ -34,6 +35,7 @@ RSpec.describe Game do
   		humanPlayer=double(Human)
 		game.instance_variable_set(:@player1, humanPlayer)
   		expect(humanPlayer).to receive(:get_spot).and_return('exit')
+  		expect(humanPlayer).to receive(:symbol).and_return('O')
 
   		expect(game).to receive(:puts).with(any_args).at_least(1).times
 
@@ -48,6 +50,7 @@ RSpec.describe Game do
   		humanPlayer=double(Human)
 		game.instance_variable_set(:@player1, humanPlayer)
   		expect(humanPlayer).to receive(:get_spot).and_return('exit')
+  		expect(humanPlayer).to receive(:symbol).and_return('O')
 
   		expect(game).to receive(:puts).with(any_args).at_least(1).times
 
@@ -67,6 +70,7 @@ RSpec.describe Game do
   		humanPlayer=double(Human)
 		game.instance_variable_set(:@player1, humanPlayer)
   		expect(humanPlayer).to receive(:get_spot).and_return('exit')
+  		expect(humanPlayer).to receive(:symbol).and_return('O')
 
   		expect(game).to receive(:puts).with("Type '1' for HumanXComputer or '2' for HumanXHuman:")
   		expect(game).to receive(:puts).with(any_args).at_least(1).times
@@ -80,6 +84,7 @@ RSpec.describe Game do
   		humanPlayer=double(Human)
 		game.instance_variable_set(:@player1, humanPlayer)
   		expect(humanPlayer).to receive(:get_spot).and_return('exit')
+  		expect(humanPlayer).to receive(:symbol).and_return('O')
 
   		game.start_game
     	expect(game.instance_variable_get(:@player2)).to be_an_instance_of Human
@@ -92,6 +97,7 @@ RSpec.describe Game do
 		game.instance_variable_set(:@player1, humanPlayer)
 		expect(humanPlayer).to receive(:is_a?).and_return(true)
   		expect(humanPlayer).to receive(:get_spot).and_return('exit')
+  		expect(humanPlayer).to receive(:symbol).and_return('O')
 
   		expect(game).to receive(:puts).with("\nHint: Type 'exit' to leave.\n\n")
   		expect(game).to receive(:puts).with(" 0 | 1 | 2 \n===+===+===\n 3 | 4 | 5 \n===+===+===\n 6 | 7 | 8 \n")
@@ -108,6 +114,7 @@ RSpec.describe Game do
 		game.instance_variable_set(:@player1, humanPlayer)
   		expect(humanPlayer).to receive(:get_spot).and_return('p')
   		expect(humanPlayer).to receive(:get_spot).and_return('exit')
+  		expect(humanPlayer).to receive(:symbol).and_return('O')
 
   		expect(game).to receive(:puts).with('Invalid position! Try again ...')
   		expect(game).to receive(:puts).with(any_args).at_least(1).times

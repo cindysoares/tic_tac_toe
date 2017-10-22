@@ -76,10 +76,18 @@ class Game
   end
 
   def winners_message
-    if @winners_symbol=='X'
-      'Computer is the winner!'
-    elsif @winners_symbol=='O'
-      'you are the winner!'
+    if @winners_symbol==@player2.symbol
+      if @player2.is_a? Computer
+        'Computer is the winner!'
+      else
+        'Player 2 is the winner!'
+      end
+    elsif @winners_symbol==@player1.symbol
+      if @player2.is_a? Computer
+        'you are the winner!'
+      else
+        'Player 1 is the winner'
+      end
     else
       'there is no winner!'
     end        
@@ -178,14 +186,16 @@ class Human
 
 end
 
-class ExpertComputer
-
+class Computer
   attr_reader :symbol
 
   def initialize(symbol, game)
     @symbol=symbol
     @game=game
   end
+end
+
+class ExpertComputer < Computer
 
   def get_spot
     spot = nil
@@ -226,14 +236,7 @@ class ExpertComputer
 
 end
 
-class CleverComputer
-
-  attr_reader :symbol
-
-  def initialize(symbol, game)
-    @symbol=symbol
-    @game=game
-  end
+class CleverComputer < Computer
 
   def get_spot
     available_spaces = @game.get_available_spaces
@@ -253,14 +256,7 @@ class CleverComputer
 
 end
 
-class SillyComputer
-
-  attr_reader :symbol
-
-  def initialize(symbol, game)
-    @symbol=symbol
-    @game=game
-  end
+class SillyComputer < Computer
 
   def get_spot
     available_spaces = @game.get_available_spaces
