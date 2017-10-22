@@ -4,7 +4,7 @@ RSpec.describe Game do
 
 	subject(:game) { Game.new() }
 
-  	it '\'s board should initially be empty' do
+  	it "'s board should initially be empty" do
     	expect(game.instance_variable_get(:@board)).to eq(["0", "1", "2", "3", "4", "5", "6", "7", "8"])
   	end
 
@@ -17,15 +17,43 @@ RSpec.describe Game do
   		expectWinnerTo(be_nil)
   	end
 
-  	it 'should print board and instructions when starts' do
+  	it "should print 'Type '1' for HumanXComputer or '2' for HumanXHuman:'" do 
+
+  		expect(game).to receive(:gets).and_return('2')
+
   		humanPlayer=double(Human)
 		game.instance_variable_set(:@player1, humanPlayer)
   		expect(humanPlayer).to receive(:get_spot).and_return('exit')
 
-  		expect(game).to receive(:puts).with("\nHint: Type \'exit\' to leave.\n\n").ordered
-  		expect(game).to receive(:puts).with(" 0 | 1 | 2 \n===+===+===\n 3 | 4 | 5 \n===+===+===\n 6 | 7 | 8 \n").ordered
-  		expect(game).to receive(:puts).with('Enter [0-8]:').ordered
-  		expect(game).to receive(:puts).with('Game over, there is no winner!').ordered
+  		expect(game).to receive(:puts).with("Type '1' for HumanXComputer or '2' for HumanXHuman:")
+  		expect(game).to receive(:puts).with(any_args).at_least(1).times
+
+  		game.start_game
+  	end
+
+  	it 'should set player2 as Human when HumanXHuman game is chosen' do 
+  		expect(game).to receive(:gets).and_return('2')
+  		
+  		humanPlayer=double(Human)
+		game.instance_variable_set(:@player1, humanPlayer)
+  		expect(humanPlayer).to receive(:get_spot).and_return('exit')
+
+  		game.start_game
+    	expect(game.instance_variable_get(:@player2)).to be_an_instance_of Human
+  	end
+
+  	it 'should print board and instructions when starts' do
+  		expect(game).to receive(:gets).and_return('1')
+  		
+  		humanPlayer=double(Human)
+		game.instance_variable_set(:@player1, humanPlayer)
+		expect(humanPlayer).to receive(:is_a?).and_return(true)
+  		expect(humanPlayer).to receive(:get_spot).and_return('exit')
+
+  		expect(game).to receive(:puts).with("\nHint: Type 'exit' to leave.\n\n")
+  		expect(game).to receive(:puts).with(" 0 | 1 | 2 \n===+===+===\n 3 | 4 | 5 \n===+===+===\n 6 | 7 | 8 \n")
+  		expect(game).to receive(:puts).with('Enter [0-8]:')
+  		expect(game).to receive(:puts).with(any_args).at_least(1).times
 
   		game.start_game
   	end

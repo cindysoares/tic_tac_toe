@@ -8,21 +8,36 @@ class Game
   end
 
   def start_game
-    # start by printing the board
-    printBoardAndInstructions()
+    # start by printing the message to choose the game type
+    chooseGameType
     # loop through until the game was won or tied 
     until game_is_over
       get_spot_of @player1
       if !game_is_over
         get_spot_of @player2
-        printBoardAndInstructions()
       end
     end
     puts "Game over, #{winners_message}"
   end
 
+  def chooseGameType
+    puts "Type '1' for HumanXComputer or '2' for HumanXHuman:"
+    user_input=get_user_input
+    if user_input=='2'
+      @player2=Human.new 'X'
+    end
+  end
+
+  def get_user_input
+    input = nil
+    until input
+      input = gets.chomp
+    end
+    input
+  end
+
   def printBoardAndInstructions
-    puts "\nHint: Type \'exit\' to leave.\n\n"
+    puts "\nHint: Type 'exit' to leave.\n\n"
     puts " #{@board[0]} | #{@board[1]} | #{@board[2]} \n===+===+===\n #{@board[3]} | #{@board[4]} | #{@board[5]} \n===+===+===\n #{@board[6]} | #{@board[7]} | #{@board[8]} \n"
     puts "Enter [0-8]:"
   end
@@ -38,6 +53,9 @@ class Game
   end
 
   def get_spot_of(player)
+    if player.is_a? Human then
+      printBoardAndInstructions()
+    end
     @user_input = nil
     until @user_input
       @user_input = player.get_spot
