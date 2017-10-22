@@ -21,6 +21,9 @@ class Game
         get_spot_of @player2
       end
     end
+    if has_a_winner(@board)
+      print_board
+    end
     puts "Game over, #{winners_message}"
   end
 
@@ -62,10 +65,14 @@ class Game
     input
   end
 
-  def printBoardAndInstructions
+  def print_board_and_instructions
     puts "\nHint: Type 'exit' to leave.\n\n"
-    puts " #{@board[0]} | #{@board[1]} | #{@board[2]} \n===+===+===\n #{@board[3]} | #{@board[4]} | #{@board[5]} \n===+===+===\n #{@board[6]} | #{@board[7]} | #{@board[8]} \n"
+    print_board
     puts "Enter [0-8]:"
+  end
+
+  def print_board
+    puts " #{@board[0]} | #{@board[1]} | #{@board[2]} \n===+===+===\n #{@board[3]} | #{@board[4]} | #{@board[5]} \n===+===+===\n #{@board[6]} | #{@board[7]} | #{@board[8]} \n"
   end
 
   def winners_message
@@ -80,7 +87,7 @@ class Game
 
   def get_spot_of(player)
     if player.is_a? Human then
-      printBoardAndInstructions()
+      print_board_and_instructions()
     end
     @user_input = nil
     until @user_input
