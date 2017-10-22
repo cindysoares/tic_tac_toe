@@ -1,12 +1,10 @@
 class Game
   def initialize
     @board = ["0", "1", "2", "3", "4", "5", "6", "7", "8"]
-    @com = "X" # the computer's marker
-    @hum = "O" # the user's marker
     @winners_symbol = nil
     @user_input = nil
-    @player1=Human.new
-    @player2=ExpertComputer.new
+    @player1=Human.new 'O'
+    @player2=ExpertComputer.new 'X', self
   end
 
   def start_game
@@ -14,9 +12,9 @@ class Game
     printBoardAndInstructions()
     # loop through until the game was won or tied 
     until game_is_over
-      get_human_spot
+      get_spot_of @player1
       if !game_is_over
-        eval_board
+        get_spot_of @player2
         printBoardAndInstructions()
       end
     end
@@ -39,15 +37,14 @@ class Game
     end        
   end
 
-  def get_human_spot
+  def get_spot_of(player)
     @user_input = nil
     until @user_input
-      @user_input = player1.get_spot
-      spot = @user_input.to_i
+      @user_input = player.get_spot
       if game_is_over then 
         return 
-      elsif @user_input=~/[0-8]/ && @board[spot] != "X" && @board[spot] != "O"
-        @board[spot] = @hum
+      elsif is_a_valid_spot @user_input
+        @board[@user_input.to_i] = player.symbol
       else 
         puts "Invalid position! Try again ..."
         @user_input = nil
@@ -55,55 +52,16 @@ class Game
     end
   end
 
-  def eval_board
-    spot = nil
-    until spot
-      if @board[4] == "4"
-        spot = 4
-        @board[spot] = @com
-      else
-        spot = get_best_move(@board, @com)
-        if @board[spot] != "X" && @board[spot] != "O"
-          @board[spot] = @com
-        else
-          spot = nil
-        end
-      end
-    end
+  def is_a_valid_spot(spot)
+    spot.to_s=~/[0-8]/ &&  @board[spot.to_i] != @player1.symbol && @board[spot.to_i] != @player2.symbol
   end
 
-  def get_best_move(board, next_player, depth = 0, best_score = {})
-    available_spaces = []
-    best_move = nil
-    board.each do |s|
-      if s != "X" && s != "O"
-        available_spaces << s
-      end
-    end
-    available_spaces.each do |as|
-      board[as.to_i] = @com
-      if has_a_winner(board)
-        best_move = as.to_i
-        board[as.to_i] = as
-        return best_move
-      else
-        board[as.to_i] = @hum
-        if has_a_winner(board)
-          best_move = as.to_i
-          board[as.to_i] = as
-          @winners_symbol=nil
-          return best_move
-        else
-          board[as.to_i] = as
-        end
-      end
-    end
-    if best_move
-      return best_move
-    else
-      n = rand(0..available_spaces.count)
-      return available_spaces[n].to_i
-    end
+  def is_a_game_over_spot(spot, player)
+    @board[spot] = player.symbol
+    has_a_winner = has_a_winner(@board)
+    @board[spot] = spot.to_s
+    @winners_symbol=nil
+    has_a_winner
   end
 
   def game_is_over
@@ -131,13 +89,32 @@ class Game
     b.all? { |s| s == "X" || s == "O" }
   end
 
+  def get_available_spaces
+    available_spaces = []
+    @board.each do |s|
+      if s != @player1.symbol && s != @player2.symbol
+        available_spaces << s
+      end
+    end
+    available_spaces
+  end
+
+  def get_opponent_of(player)
+    if @player1===player then
+      @player2
+    else
+      @player1
+    end
+  end
+
 end
-
-
 
 class Human
 
-  def initialize
+  attr_reader :symbol
+
+  def initialize(symbol)
+      @symbol=symbol
   end
 
   def get_spot
@@ -152,8 +129,49 @@ end
 
 class ExpertComputer
 
-  def get_spot
+  attr_reader :symbol
+
+  def initialize(symbol, game)
+    @symbol=symbol
+    @game=game
   end
+
+  def get_spot
+    spot = nil
+    until spot
+      if @game.is_a_valid_spot 4 then
+        spot = 4
+      else
+        spot = get_best_move
+        if !@game.is_a_valid_spot(spot) then
+          spot = nil
+        end
+      end
+    end
+    spot
+  end
+
+  def get_best_move
+    available_spaces = @game.get_available_spaces
+    best_move = nil
+    available_spaces.each do |as|
+      if @game.is_a_game_over_spot as.to_i, self then
+        best_move = as.to_i
+        return best_move
+      else
+        if @game.is_a_game_over_spot as.to_i, @game.get_opponent_of(self) then
+          best_move = as.to_i
+          return best_move
+        end
+      end
+    end
+    if best_move
+      return best_move
+    else
+      n = rand(0..available_spaces.count)
+      return available_spaces[n].to_i
+    end
+  end  
 
 end
 

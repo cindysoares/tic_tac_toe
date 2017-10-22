@@ -18,8 +18,8 @@ RSpec.describe Game do
   	end
 
   	it 'should print board and instructions when starts' do
-  		humanPlayer=double(Player)
-		game.instance_variable_set(:@player1)=humanPlayer
+  		humanPlayer=double(Human)
+		game.instance_variable_set(:@player1, humanPlayer)
   		expect(humanPlayer).to receive(:get_spot).and_return('exit')
 
   		expect(game).to receive(:puts).with("\nHint: Type \'exit\' to leave.\n\n").ordered
@@ -31,8 +31,8 @@ RSpec.describe Game do
   	end
 
   	it 'should print \'Invalid position! Try again...\' when the user\'s input is different from 0,1,2,3,4,5,6,7,8 or exit' do
-  		humanPlayer=double(Player)
-		game.instance_variable_get(:@players)[0]=humanPlayer
+  		humanPlayer=double(Human)
+		game.instance_variable_set(:@player1, humanPlayer)
   		expect(humanPlayer).to receive(:get_spot).and_return('p')
   		expect(humanPlayer).to receive(:get_spot).and_return('exit')
 
@@ -84,7 +84,7 @@ RSpec.describe Game do
 		it 'when there are two \'O\'s in the same line' do 
 			game.instance_variable_set(:@board, ["O", "O", "2", "3", "X", "5", "6", "7", "8"])
 
-			game.eval_board
+			game.get_spot_of game.instance_variable_get(:@player2)
 
 			expect(game.instance_variable_get(:@board)).to eq(["O", "O", "X", "3", "X", "5", "6", "7", "8"])
 			expectWinnerTo(be_nil)
@@ -93,7 +93,7 @@ RSpec.describe Game do
 		it 'when there are two \'O\'s in the same column' do 
 			game.instance_variable_set(:@board, ["O", "1", "2", "O", "X", "5", "6", "7", "8"])
 
-			game.eval_board
+			game.get_spot_of game.instance_variable_get(:@player2)
 
 			expect(game.instance_variable_get(:@board)).to eq(["O", "1", "2", "O", "X", "5", "X", "7", "8"])
 			expectWinnerTo(be_nil)
@@ -102,7 +102,7 @@ RSpec.describe Game do
 		it 'when there are two \'O\'s in diagonal' do 
 			game.instance_variable_set(:@board, ["O", "X", "2", "3", "O", "5", "6", "7", "8"])
 
-			game.eval_board
+			game.get_spot_of game.instance_variable_get(:@player2)
 
 			expect(game.instance_variable_get(:@board)).to eq(["O", "X", "2", "3", "O", "5", "6", "7", "X"])
 			expectWinnerTo(be_nil)
