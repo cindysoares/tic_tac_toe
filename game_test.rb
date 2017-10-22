@@ -8,10 +8,53 @@ RSpec.describe Game do
     	expect(game.instance_variable_get(:@board)).to eq(["0", "1", "2", "3", "4", "5", "6", "7", "8"])
   	end
 
-  	it 'should initially have a Human player and an expert Computer player' do
+  	it 'should initialize player1 as a Human' do
     	expect(game.instance_variable_get(:@player1)).to be_an_instance_of Human
+  	end
+
+  	it 'should initialize player2 as a ExpertComputer when hard level is chosen' do
+  		expect(game).to receive(:gets).and_return('1')
+  		expect(game).to receive(:gets).and_return('3')
+
+  		humanPlayer=double(Human)
+		game.instance_variable_set(:@player1, humanPlayer)
+  		expect(humanPlayer).to receive(:get_spot).and_return('exit')
+
+  		expect(game).to receive(:puts).with(any_args).at_least(1).times
+
+  		game.start_game
+
     	expect(game.instance_variable_get(:@player2)).to be_an_instance_of ExpertComputer
   	end
+
+  	it 'should initialize player2 as a CleverComputer when medium level is chosen' do
+  		expect(game).to receive(:gets).and_return('1')
+  		expect(game).to receive(:gets).and_return('2')
+
+  		humanPlayer=double(Human)
+		game.instance_variable_set(:@player1, humanPlayer)
+  		expect(humanPlayer).to receive(:get_spot).and_return('exit')
+
+  		expect(game).to receive(:puts).with(any_args).at_least(1).times
+
+  		game.start_game
+
+    	expect(game.instance_variable_get(:@player2)).to be_an_instance_of CleverComputer
+  	end
+
+  	it 'should initialize player2 as a SillyComputer when easy level is chosen' do
+  		expect(game).to receive(:gets).and_return('1').twice
+
+  		humanPlayer=double(Human)
+		game.instance_variable_set(:@player1, humanPlayer)
+  		expect(humanPlayer).to receive(:get_spot).and_return('exit')
+
+  		expect(game).to receive(:puts).with(any_args).at_least(1).times
+
+  		game.start_game
+
+    	expect(game.instance_variable_get(:@player2)).to be_an_instance_of SillyComputer
+  	end  	
 
   	it 'should has no winner yet' do  		
   		expectWinnerTo(be_nil)
