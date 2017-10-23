@@ -63,7 +63,7 @@ RSpec.describe Game do
   		expectWinnerTo(be_nil)
   	end
 
-  	it "should print 'Type '1' for HumanXComputer or '2' for HumanXHuman:'" do 
+  	it "should print 'Type '1' for HumanXComputer, '2' for HumanXHuman or '3' for ComputerXComputer:'" do 
 
   		expect(game).to receive(:gets).and_return('2')
 
@@ -72,7 +72,7 @@ RSpec.describe Game do
   		expect(humanPlayer).to receive(:get_spot).and_return('exit')
   		expect(humanPlayer).to receive(:symbol).and_return('O')
 
-  		expect(game).to receive(:puts).with("Type '1' for HumanXComputer or '2' for HumanXHuman:")
+  		expect(game).to receive(:puts).with("Type '1' for HumanXComputer, '2' for HumanXHuman or '3' for ComputerXComputer:")
   		expect(game).to receive(:puts).with(any_args).at_least(1).times
 
   		game.start_game
@@ -99,8 +99,8 @@ RSpec.describe Game do
   		expect(humanPlayer).to receive(:get_spot).and_return('exit')
   		expect(humanPlayer).to receive(:symbol).and_return('O').twice
 
-  		expect(game).to receive(:puts).with("\nHint: Type 'exit' to leave.\n\n")
-  		expect(game).to receive(:puts).with(" 0 | 1 | 2 \n===+===+===\n 3 | 4 | 5 \n===+===+===\n 6 | 7 | 8 \n")
+  		expect(game).to receive(:puts).with("\nHint: Type 'exit' to leave.\n")
+  		expect(game).to receive(:puts).with("\n 0 | 1 | 2 \n===+===+===\n 3 | 4 | 5 \n===+===+===\n 6 | 7 | 8 \n")
   		expect(game).to receive(:puts).with("'O', enter [0-8]:")
   		expect(game).to receive(:puts).with(any_args).at_least(1).times
 

@@ -21,18 +21,20 @@ class Game
         get_spot_of @player2
       end
     end
-    if has_a_winner(@board)
-      print_board
-    end
+    print_board
     puts "Game over, #{winners_message}"
   end
 
   def chooseGameType
-    puts "Type '1' for HumanXComputer or '2' for HumanXHuman:"
+    puts "Type '1' for HumanXComputer, '2' for HumanXHuman or '3' for ComputerXComputer:"
     user_input=nil
     until user_input
       user_input=get_user_input
-      if user_input=='2'
+      if user_input=='3'
+        @player1=@game_level[:medium]
+        @player1.symbol='O'
+        @player2=@game_level[:hard]
+      elsif user_input=='2'
         @player2=Human.new 'X'
       elsif user_input=='1'
         puts "Type '1' for easy, '2' for medium or '3' for hard:"
@@ -66,13 +68,13 @@ class Game
   end
 
   def print_board_and_instructions(player)
-    puts "\nHint: Type 'exit' to leave.\n\n"
+    puts "\nHint: Type 'exit' to leave.\n"
     print_board
     puts "'#{player.symbol}', enter [0-8]:"
   end
 
   def print_board
-    puts " #{@board[0]} | #{@board[1]} | #{@board[2]} \n===+===+===\n #{@board[3]} | #{@board[4]} | #{@board[5]} \n===+===+===\n #{@board[6]} | #{@board[7]} | #{@board[8]} \n"
+    puts "\n #{@board[0]} | #{@board[1]} | #{@board[2]} \n===+===+===\n #{@board[3]} | #{@board[4]} | #{@board[5]} \n===+===+===\n #{@board[6]} | #{@board[7]} | #{@board[8]} \n"
   end
 
   def winners_message
@@ -108,6 +110,9 @@ class Game
         puts "Invalid position! Try again ..."
         @user_input = nil
       end
+    end
+    if player.is_a? Computer then
+      print_board
     end
   end
 
@@ -187,7 +192,7 @@ class Human
 end
 
 class Computer
-  attr_reader :symbol
+  attr_accessor :symbol
 
   def initialize(symbol, game)
     @symbol=symbol
