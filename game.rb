@@ -65,10 +65,10 @@ class Game
     input
   end
 
-  def print_board_and_instructions
+  def print_board_and_instructions(player)
     puts "\nHint: Type 'exit' to leave.\n\n"
     print_board
-    puts "Enter [0-8]:"
+    puts "'#{player.symbol}', enter [0-8]:"
   end
 
   def print_board
@@ -80,13 +80,13 @@ class Game
       if @player2.is_a? Computer
         'Computer is the winner!'
       else
-        'Player 2 is the winner!'
+        "'#{@player2.symbol}' is the winner!"
       end
     elsif @winners_symbol==@player1.symbol
       if @player2.is_a? Computer
         'you are the winner!'
       else
-        'Player 1 is the winner'
+        "'#{@player1.symbol}' is the winner!"
       end
     else
       'there is no winner!'
@@ -95,7 +95,7 @@ class Game
 
   def get_spot_of(player)
     if player.is_a? Human then
-      print_board_and_instructions()
+      print_board_and_instructions(player)
     end
     @user_input = nil
     until @user_input

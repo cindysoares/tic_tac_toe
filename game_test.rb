@@ -97,11 +97,11 @@ RSpec.describe Game do
 		game.instance_variable_set(:@player1, humanPlayer)
 		expect(humanPlayer).to receive(:is_a?).and_return(true)
   		expect(humanPlayer).to receive(:get_spot).and_return('exit')
-  		expect(humanPlayer).to receive(:symbol).and_return('O')
+  		expect(humanPlayer).to receive(:symbol).and_return('O').twice
 
   		expect(game).to receive(:puts).with("\nHint: Type 'exit' to leave.\n\n")
   		expect(game).to receive(:puts).with(" 0 | 1 | 2 \n===+===+===\n 3 | 4 | 5 \n===+===+===\n 6 | 7 | 8 \n")
-  		expect(game).to receive(:puts).with('Enter [0-8]:')
+  		expect(game).to receive(:puts).with("'O', enter [0-8]:")
   		expect(game).to receive(:puts).with(any_args).at_least(1).times
 
   		game.start_game
